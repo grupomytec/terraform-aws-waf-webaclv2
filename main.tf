@@ -9,6 +9,18 @@ resource "aws_wafv2_web_acl" "main" {
 
   description = var.description
 
+  dynamic "challenge_config" {
+    for_each = var.challenge_config
+    content {
+      dynamic "immunity_time_property" {
+        for_each = length(lookup(challenge_config.value, "immunity_time_property", {})) == 0 ? [] : [lookup(challenge_config.value, "immunity_time_property", {})]
+        content {
+          immunity_time = lookup(immunity_time_property.value, "immunity_time", 300)
+        }
+      }
+    }
+  }
+
   dynamic "custom_response_body" {
     for_each = var.custom_response_bodies
     content {
