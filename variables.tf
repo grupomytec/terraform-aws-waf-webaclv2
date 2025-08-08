@@ -96,3 +96,13 @@ variable "custom_response_bodies" {
   description = "Custom response bodies to be referenced on a per rule basis. https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/wafv2_web_acl#custom-response-body"
   default     = []
 }
+
+variable "challenge_config" {
+  type = list(object({
+    immunity_time_property = optional(object({
+      immunity_time = optional(number, 300)
+    }), {})
+  }))
+  description = "Configuration block for challenge rule actions. Immunity time defines how long a particular IP address will be immune from further challenges after successfully completing a challenge."
+  default     = []
+}
